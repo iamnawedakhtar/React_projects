@@ -8,7 +8,6 @@ function App() {
 
   return (
     <>
-       <h1>hello redux toolkit</h1>
        <AddTodo/>
        <Todos/>
     </>

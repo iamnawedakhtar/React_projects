@@ -1,20 +1,35 @@
-import React, { useState } from 'react'
-import {useDispatch} from 'react-redux'
-import {addTodo } from '../features/todo/todoSlice'
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addTodo } from "../features/todo/todoSlice";
 
 function AddTodo() {
-   
-  const [input ,setInput] =useState('');
-  const dispatch= useDispatch();
+  const [input, setInput] = useState("");
+  const [btnname, setBtnname] = useState("Add Todo");
+  const dispatch = useDispatch();
+  const todos = useSelector((state) => state.todos); // how to get acces from store
 
-  const addTodoHandler =(e)=>{
-       e.preventDefault();
-
-       dispatch(addTodo(input));
-       setInput('') // good practice to clean the input space after adding
-
-  }
-
+  const addTodoHandler = (e) => {
+    e.preventDefault();
+     
+    todos.forEach(todo => {
+      if(todo.isEditable==true)
+        {
+          update=true;
+        }
+    });
+   if(update==false)
+    {
+      dispatch(addTodo(input));
+      setInput(""); // good practice to clean the input space after adding
+    }
+    else
+    {
+        setBtnname("Update");
+        dispatch(appendTodo(input));
+        setInput(""); // good practice to clean the input space after adding
+        setBtnname("Add Todo");
+    }
+  };
 
   return (
     <form onSubmit={addTodoHandler} className="space-x-3 mt-12">
@@ -25,14 +40,15 @@ function AddTodo() {
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
+
       <button
         type="submit"
         className="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
       >
-        Add Todo
+        {btnname}
       </button>
     </form>
-  )
+  );
 }
 
-export default AddTodo
+export default AddTodo;
